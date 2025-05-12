@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bikiran.Utils.Models.ApiResp
+namespace Bikiran.Utils.ApiResp
 {
     /// <summary>
     /// Represents a standardized API response format for consistent client communication

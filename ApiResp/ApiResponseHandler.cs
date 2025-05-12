@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bikiran.Utils.Models.ApiResp
+namespace Bikiran.Utils.ApiResp
 {
     /// <summary>
     /// Provides factory methods for creating standardized API responses
