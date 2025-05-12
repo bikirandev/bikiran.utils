@@ -1,0 +1,33 @@
+﻿<!-- Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project -->
+
+
+
+
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		
+		<!-- Core Package Metadata -->
+		<PackageId>Bikiran.Utils</PackageId>
+		<Version>1.0.0</Version>
+		<Authors>bikirandev</Authors>
+		<Company>BIKIRAN</Company>
+		<Description>Utility functions for common operations</Description>
+		<PackageTags>utilities helper tools</PackageTags>
+
+		<!-- Recommended Additions -->
+		<PackageProjectUrl>https://github.com/yourusername/Bikiran.Utils</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/yourusername/Bikiran.Utils.git</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+	</PropertyGroup>
+</Project>
