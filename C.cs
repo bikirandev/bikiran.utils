@@ -25,7 +25,7 @@ public static class C
     /// // [2] another value
     /// </code>
     /// </example>
-    public static void P(params string?[] values)
+    public static void P(params string[] values)
     {
         for (int i = 0; i < values.Length; i++)
         {
@@ -47,7 +47,7 @@ public static class C
     /// <remarks>
     /// Combines debug logging with immediate failure indication. Useful for critical error scenarios.
     /// </remarks>
-    public static void X(params string?[] values)
+    public static void X(params string[] values)
     {
         P(values);
         throw new Exception(values.ToJson());
@@ -61,7 +61,7 @@ public static class C
     /// This is the recommended method for normal output operations.
     /// For error handling with immediate termination, use <see cref="X"/>
     /// </remarks>
-    public static void Print(params string?[] values)
+    public static void Print(params string[] values)
     {
         P(values);
     }
