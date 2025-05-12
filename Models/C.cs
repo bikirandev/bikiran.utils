@@ -1,7 +1,7 @@
 ﻿using System;
 using NuGet.Protocol;
 
-namespace Bikiran.Utils;
+namespace Bikiran.Utils.Models;
 
 /// <summary>
 /// Provides console output utilities with enhanced formatting and debugging capabilities
