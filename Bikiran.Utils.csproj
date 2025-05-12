@@ -24,10 +24,15 @@
 		<PackageTags>utilities helper tools</PackageTags>
 
 		<!-- Recommended Additions -->
-		<PackageProjectUrl>https://github.com/yourusername/Bikiran.Utils</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/yourusername/Bikiran.Utils.git</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/bikirandev/bikiran.utils</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/bikirandev/bikiran.utils.git</RepositoryUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Add NuGet.Protocol package reference -->
+		<PackageReference Include="NuGet.Protocol" Version="6.13.2" />
+	</ItemGroup>
 </Project>
