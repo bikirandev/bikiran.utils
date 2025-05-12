@@ -1,13 +1,13 @@
-# Bikiran.Utils
+# bikiran.utils
 
-![NuGet Version](https://img.shields.io/nuget/v/Bikiran.Utils.svg?style=flat-square)
-![License](https://img.shields.io/github/license/yourusername/Bikiran.Utils.svg?style=flat-square)
+![NuGet Version](https://img.shields.io/nuget/v/bikiran.utils.svg?style=flat-square)
+![License](https://img.shields.io/github/license/bikirandev/bikiran.utils.svg?style=flat-square)
 
 A utility library for common .NET operations with enhanced debugging capabilities
 
 ## Installation
 ```bash
-dotnet add package Bikiran.Utils
+dotnet add package bikiran.utils
 ```
 
 ## Features
@@ -18,7 +18,7 @@ dotnet add package Bikiran.Utils
 
 ## Quick Start
 ```csharp
-using Bikiran.Utils;
+using bikiran.utils;
 
 // Print values with index markers
 C.Print("Application started", DateTime.Now.ToString());
@@ -33,7 +33,7 @@ catch {
 ```
 
 ## Documentation
-Full API reference available at [GitHub Wiki](https://github.com/yourusername/Bikiran.Utils/wiki)
+Full API reference available at [GitHub Wiki](https://github.com/bikirandev/bikiran.utils/wiki)
 
 ## Contributing
 Pull requests welcome! Please follow our [contribution guidelines](CONTRIBUTING.md)
