@@ -4,7 +4,7 @@
 ![License](https://img.shields.io/github/license/bikirandev/Bikiran.Utils.svg?style=flat-square)
 [![API Docs](https://img.shields.io/badge/docs-API%20Reference-blue.svg)](https://github.com/bikirandev/Bikiran.Utils/wiki)
 
-A comprehensive utility library for .NET development with debugging and API support
+A comprehensive utility library for .NET development with debugging, API support, and configuration management
 
 ## Installation
 
@@ -25,6 +25,12 @@ dotnet add package Bikiran.Utils
 - 🏭 Factory methods for success/error responses
 - 🔗 Request correlation tracking
 - 🛠️ Exception-to-response mapping
+
+### Configuration Management
+- 🔑 Key-value pair modeling with metadata
+- 🏷️ Typed configuration objects with defaults
+- 🔒 Public/private access control
+- 📋 ToString() override for diagnostics
 
 ## Quick Start
 
@@ -63,6 +69,23 @@ catch (Exception ex) {
 }
 ```
 
+### Key-Value Configuration
+```csharp
+using Bikiran.Utils.Models;
+
+// Create a configuration entry
+var config = new KeyObj 
+{
+    Key = "App.Theme.Color",
+    Title = "Application Color Scheme",
+    DefaultValue = "dark",
+    IsPublic = false
+};
+
+Console.WriteLine(config);
+// Output: App.Theme.Color (Application Color Scheme) - Default: dark [Private]
+```
+
 ## Core Components
 
 ### `C` Class (Debugging)
@@ -84,19 +107,31 @@ public class ApiResponse {
 }
 ```
 
-### Response Factory Methods
-| Method | Purpose | Example |
-|--------|---------|---------|
-| `Success()` | Successful operation | `Success("Created", data)` |
-| `Error()` | Generic error | `Error("Validation failed")` |
-| `NotFound()` | 404 equivalent | `NotFound("User missing")` |
-| `BadRequest()` | 400 equivalent | `BadRequest(exception)` |
+### `KeyObj` Configuration Model
+```csharp
+public class KeyObj {
+    public string Key { get; set; }         // Unique identifier
+    public string Title { get; set; }        // Human-readable name
+    public object DefaultValue { get; set; } // Default value
+    public bool IsPublic { get; set; }       // Visibility flag
+}
+```
+
+### Factory Methods Reference
+| Component          | Method            | Purpose                          | Example                          |
+|--------------------|-------------------|----------------------------------|----------------------------------|
+| **ApiResponse**    | `Success()`       | Successful operation             | `Success("Created", data)`       |
+|                    | `Error()`         | Generic error                    | `Error("Validation failed")`     |
+|                    | `NotFound()`      | 404 equivalent                  | `NotFound("User missing")`       |
+|                    | `BadRequest()`    | 400 equivalent                  | `BadRequest(exception)`          |
+| **KeyObj**         | (Constructor)     | Create configuration entry      | `new KeyObj { ... }`             |
 
 ## Documentation
 
 - **IntelliSense Support:** Full XML documentation included
 - **API Reference:** [GitHub Wiki](https://github.com/bikirandev/Bikiran.Utils/wiki)
 - **Samples:** [Example Projects](/examples) directory
+- **Configuration Guide:** [KeyObj Usage](https://github.com/bikirandev/Bikiran.Utils/wiki/KeyObj-Usage)
 
 ## Contributing
 
