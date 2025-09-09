@@ -31,6 +31,12 @@ dotnet add package Bikiran.Utils
 - 🏷️ Reference tracking for debugging context
 - 🔧 Consistent exception formatting
 
+### IP Address Utilities
+- 🌐 Client IP extraction from HTTP context
+- 🔍 Proxy and CDN header support (Cloudflare, Nginx)
+- 🔢 IP address format conversion (string/long)
+- 🛡️ Robust fallback mechanisms
+
 ### Configuration Management
 - 🔑 Key-value pair modeling with metadata
 - 🏷️ Typed configuration objects with defaults
@@ -65,6 +71,28 @@ throw exception;
 
 // Exception will contain reference data for debugging
 // exception.Data["Reference"] will be "UserService.ValidateUser"
+```
+
+### IP Address Operations
+```csharp
+using Bikiran.Utils.Models;
+
+// In your ASP.NET Core controller or middleware
+public IActionResult GetUserInfo()
+{
+    // Get client IP as string (supports Cloudflare, Nginx proxies)
+    string clientIp = IpOperation.GetIpString(HttpContext);
+    
+    // Get IP as long integer for database storage/comparison
+    long ipAsLong = IpOperation.GetIpLong(HttpContext);
+    
+    return Ok(new { ClientIP = clientIp, IpNumeric = ipAsLong });
+}
+
+// Handles:
+// - CF-Connecting-IP (Cloudflare)
+// - X-Forwarded-For (Nginx/Proxy)
+// - Direct connection IP fallback
 ```
 
 ### API Response Handling
@@ -124,6 +152,20 @@ var exception = Excep.Create("Error message", "Optional.Reference.Context");
 // - Data["Reference"]: "Optional.Reference.Context"
 ```
 
+### `IpOperation` Class (IP Address Utilities)
+```csharp
+// Get client IP address as string
+string clientIp = IpOperation.GetIpString(httpContext);
+
+// Get client IP address as long integer
+long ipNumeric = IpOperation.GetIpLong(httpContext);
+
+// Priority order for IP detection:
+// 1. CF-Connecting-IP (Cloudflare)
+// 2. X-Forwarded-For (Nginx/Proxy) 
+// 3. RemoteIpAddress (Direct connection)
+```
+
 ### `ApiResponse` Model
 ```csharp
 public class ApiResponse {
@@ -147,6 +189,8 @@ public class KeyObj {
 ### Factory Methods Reference
 | Component          | Method            | Purpose                          | Example                          |
 |--------------------|-------------------|----------------------------------|----------------------------------|
+| **IpOperation**    | `GetIpString()`   | Get client IP as string          | `GetIpString(HttpContext)`       |
+|                    | `GetIpLong()`     | Get client IP as long integer    | `GetIpLong(HttpContext)`         |
 | **Excep**          | `Create()`        | Create exception with reference  | `Create("Error", "Module.Method")` |
 | **ApiResponse**    | `Success()`       | Successful operation             | `Success("Created", data)`       |
 |                    | `Error()`         | Generic error                    | `Error("Validation failed")`     |
