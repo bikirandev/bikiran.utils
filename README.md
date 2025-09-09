@@ -26,6 +26,11 @@ dotnet add package Bikiran.Utils
 - 🔗 Request correlation tracking
 - 🛠️ Exception-to-response mapping
 
+### Exception Handling
+- 🎯 Simplified exception creation with metadata
+- 🏷️ Reference tracking for debugging context
+- 🔧 Consistent exception formatting
+
 ### Configuration Management
 - 🔑 Key-value pair modeling with metadata
 - 🏷️ Typed configuration objects with defaults
@@ -48,6 +53,18 @@ try {
 catch {
     C.X("Operation failed", "User ID: 1234", errorDetails);
 }
+```
+
+### Exception Creation
+```csharp
+using Bikiran.Utils.Models;
+
+// Create exception with reference
+var exception = Excep.Create("Invalid user input", "UserService.ValidateUser");
+throw exception;
+
+// Exception will contain reference data for debugging
+// exception.Data["Reference"] will be "UserService.ValidateUser"
 ```
 
 ### API Response Handling
@@ -97,6 +114,16 @@ C.Print("Configuration", configValue);
 C.X("Critical failure", errorContext);
 ```
 
+### `Excep` Class (Exception Creation)
+```csharp
+// Create exception with optional reference
+var exception = Excep.Create("Error message", "Optional.Reference.Context");
+
+// The exception will have:
+// - Message: "Error message"
+// - Data["Reference"]: "Optional.Reference.Context"
+```
+
 ### `ApiResponse` Model
 ```csharp
 public class ApiResponse {
@@ -120,11 +147,12 @@ public class KeyObj {
 ### Factory Methods Reference
 | Component          | Method            | Purpose                          | Example                          |
 |--------------------|-------------------|----------------------------------|----------------------------------|
+| **Excep**          | `Create()`        | Create exception with reference  | `Create("Error", "Module.Method")` |
 | **ApiResponse**    | `Success()`       | Successful operation             | `Success("Created", data)`       |
 |                    | `Error()`         | Generic error                    | `Error("Validation failed")`     |
-|                    | `NotFound()`      | 404 equivalent                  | `NotFound("User missing")`       |
-|                    | `BadRequest()`    | 400 equivalent                  | `BadRequest(exception)`          |
-| **KeyObj**         | (Constructor)     | Create configuration entry      | `new KeyObj { ... }`             |
+|                    | `NotFound()`      | 404 equivalent                   | `NotFound("User missing")`       |
+|                    | `BadRequest()`    | 400 equivalent                   | `BadRequest(exception)`          |
+| **KeyObj**         | (Constructor)     | Create configuration entry       | `new KeyObj { ... }`             |
 
 ## Documentation
 
