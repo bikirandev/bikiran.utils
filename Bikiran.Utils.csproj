@@ -4,7 +4,7 @@
 		
 		<!-- Core Package Metadata -->
 		<PackageId>Bikiran.Utils</PackageId>
-		<Version>1.0.7</Version>
+		<Version>1.0.8</Version>
 		<Authors>bikirandev</Authors>
 		<Company>BIKIRAN</Company>
 		<Description>Utility functions for common operations</Description>
