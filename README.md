@@ -25,11 +25,13 @@ dotnet add package Bikiran.Utils
 - 🏭 Factory methods for success/error responses
 - 🔗 Request correlation tracking
 - 🛠️ Exception-to-response mapping
+- 🎯 Generic typed responses with field-level error handling (V3)
 
 ### Exception Handling
 - 🎯 Simplified exception creation with metadata
 - 🏷️ Reference tracking for debugging context
 - 🔧 Consistent exception formatting
+- 📋 Field-specific error collection support (V3)
 
 ### IP Address Utilities
 - 🌐 Client IP extraction from HTTP context
@@ -71,6 +73,15 @@ throw exception;
 
 // Exception will contain reference data for debugging
 // exception.Data["Reference"] will be "UserService.ValidateUser"
+
+// Create exception with field-specific errors (V3)
+var errors = new List<ApiErrorV3>
+{
+    new ApiErrorV3 { Field = "Email", Message = "Invalid email format" },
+    new ApiErrorV3 { Field = "Password", Message = "Password must be at least 8 characters" }
+};
+var validationException = Excep.CreateV3("Validation failed", errors);
+throw validationException;
 ```
 
 ### IP Address Operations
@@ -114,6 +125,62 @@ catch (Exception ex) {
 }
 ```
 
+### API Response V3 (Strongly-Typed with Field Errors)
+```csharp
+using Bikiran.Utils.ApiResp;
+
+// Success response with strongly-typed data
+var successResponse = new ApiResponseV3<User>
+{
+    Error = false,
+    Message = "User retrieved successfully",
+    Data = new User { Id = 1, Name = "John Doe" }
+};
+
+// Validation error response with field-specific errors
+var errorResponse = new ApiResponseV3<object>
+{
+    Error = true,
+    Message = "Validation failed",
+    Errors = new List<ApiErrorV3>
+    {
+        new ApiErrorV3 { Field = "Email", Message = "Invalid email format" },
+        new ApiErrorV3 { Field = "Age", Message = "Must be 18 or older" }
+    }
+};
+
+// Use in ASP.NET Core controller
+[HttpPost]
+public ActionResult<ApiResponseV3<User>> CreateUser(UserDto dto)
+{
+    if (!ModelState.IsValid)
+    {
+        var errors = ModelState.SelectMany(x => x.Value.Errors)
+            .Select(e => new ApiErrorV3 
+            { 
+                Field = e.Exception?.Source ?? "Unknown",
+                Message = e.ErrorMessage 
+            }).ToList();
+            
+        return BadRequest(new ApiResponseV3<object>
+        {
+            Error = true,
+            Message = "Validation failed",
+            Errors = errors
+        });
+    }
+    
+    var user = userService.Create(dto);
+    return Ok(new ApiResponseV3<User>
+    {
+        Error = false,
+        Message = "User created successfully",
+        Data = user,
+        ReferenceName = Guid.NewGuid().ToString()
+    });
+}
+```
+
 ### Key-Value Configuration
 ```csharp
 using Bikiran.Utils.Models;
@@ -150,6 +217,16 @@ var exception = Excep.Create("Error message", "Optional.Reference.Context");
 // The exception will have:
 // - Message: "Error message"
 // - Data["Reference"]: "Optional.Reference.Context"
+
+// Create exception with field-specific errors (V3)
+var errors = new List<ApiErrorV3>
+{
+    new ApiErrorV3 { Field = "Username", Message = "Already exists" }
+};
+var exception = Excep.CreateV3("Validation failed", errors);
+// The exception will have:
+// - Message: "Validation failed"
+// - Data["Reference"]: List<ApiErrorV3> collection
 ```
 
 ### `IpOperation` Class (IP Address Utilities)
@@ -176,6 +253,22 @@ public class ApiResponse {
 }
 ```
 
+### `ApiResponseV3<T>` Model (Strongly-Typed)
+```csharp
+public class ApiResponseV3<T> {
+    public bool Error { get; set; }
+    public List<ApiErrorV3>? Errors { get; set; }  // Field-specific errors
+    public string Message { get; set; }
+    public T? Data { get; set; }                   // Generic typed data
+    public string ReferenceName { get; set; }
+}
+
+public class ApiErrorV3 {
+    public string Field { get; set; }     // Field name
+    public string Message { get; set; }    // Error message
+}
+```
+
 ### `KeyObj` Configuration Model
 ```csharp
 public class KeyObj {
@@ -192,11 +285,24 @@ public class KeyObj {
 | **IpOperation**    | `GetIpString()`   | Get client IP as string          | `GetIpString(HttpContext)`       |
 |                    | `GetIpLong()`     | Get client IP as long integer    | `GetIpLong(HttpContext)`         |
 | **Excep**          | `Create()`        | Create exception with reference  | `Create("Error", "Module.Method")` |
+|                    | `CreateV3()`      | Create exception with field errors | `CreateV3("Validation failed", errors)` |
 | **ApiResponse**    | `Success()`       | Successful operation             | `Success("Created", data)`       |
 |                    | `Error()`         | Generic error                    | `Error("Validation failed")`     |
 |                    | `NotFound()`      | 404 equivalent                   | `NotFound("User missing")`       |
 |                    | `BadRequest()`    | 400 equivalent                   | `BadRequest(exception)`          |
+| **ApiResponseV3**  | (Constructor)     | Create typed API response        | `new ApiResponseV3<User> { ... }` |
+| **ApiErrorV3**     | (Constructor)     | Create field-level error         | `new ApiErrorV3 { ... }`         |
 | **KeyObj**         | (Constructor)     | Create configuration entry       | `new KeyObj { ... }`             |
+
+## Key Differences: ApiResponse vs ApiResponseV3
+
+| Feature | ApiResponse | ApiResponseV3<T> |
+|---------|-------------|------------------|
+| **Data Type** | `object` (requires casting) | Generic `T` (type-safe) |
+| **Error Details** | Single message only | Collection of field-specific errors |
+| **Null Safety** | Standard C# | Nullable reference types enabled |
+| **Use Case** | Simple success/error responses | Complex validation with multiple errors |
+| **Type Safety** | Runtime checks needed | Compile-time type checking |
 
 ## Documentation
 
