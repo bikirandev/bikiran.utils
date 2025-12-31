@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Linq;
 using System.Net;
-using Microsoft.AspNetCore.Http;
+
 
 namespace Bikiran.Utils.Models
 {
