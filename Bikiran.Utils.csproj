@@ -7,18 +7,23 @@
 		<Version>1.0.10</Version>
 		<Authors>bikirandev</Authors>
 		<Company>BIKIRAN</Company>
-		<Description>Utility functions for common operations</Description>
-		<PackageTags>utilities helper tools</PackageTags>
+		<Description>A comprehensive utility library for .NET development with console logging, API response handling, debugging utilities, exception handling, IP address operations, and configuration management. Includes ConsoleLogger for colored console output, ApiResponse/ApiResponseV3 for structured REST APIs, and utilities for common development tasks.</Description>
+		<PackageTags>utilities;helper;tools;console;logger;logging;api;response;debugging;exception;ip-address;configuration;colored-console;rest-api;asp-net-core</PackageTags>
+		<PackageReleaseNotes>v1.0.10: Added ConsoleLogger class with colored console output, log levels, progress indicators, headers, separators, banners, and multi-color support. Fixed timestamp formatting in Error method.</PackageReleaseNotes>
 
 		<!-- Recommended Additions -->
 		<PackageProjectUrl>https://github.com/bikirandev/bikiran.utils</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/bikirandev/bikiran.utils.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		
 		<!-- Add below existing PackageTags -->
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<!-- <PackageIcon>icon.png</PackageIcon> -->
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -29,5 +34,6 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<!-- <None Include="icon.png" Pack="true" PackagePath="\" /> -->
 	</ItemGroup>
 </Project>

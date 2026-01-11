@@ -14,13 +14,25 @@ dotnet add package Bikiran.Utils
 
 ## Features
 
+### Console Logging
+
+- 🎨 Colored console output with 8 color methods
+- 📝 Log level methods (Success, Info, Warning, Error, Debug)
+- ⏱️ Optional timestamps on log messages
+- 🎭 Multi-color output on same line
+- 📊 Headers, separators, and banners
+- 📈 Progress indicators for long-running tasks
+- 🔑 Key-value formatted output
+
 ### Debugging Utilities
+
 - 🖨️ Formatted console output with index tracking
 - 🚨 Exception generation with JSON-formatted context
 - 🔍 NuGet package version inspection
 - 🎯 Simplified debugging workflows
 
 ### API Response Handling
+
 - ✅ Structured response models for REST APIs
 - 🏭 Factory methods for success/error responses
 - 🔗 Request correlation tracking
@@ -28,18 +40,21 @@ dotnet add package Bikiran.Utils
 - 🎯 Generic typed responses with field-level error handling (V3)
 
 ### Exception Handling
+
 - 🎯 Simplified exception creation with metadata
 - 🏷️ Reference tracking for debugging context
 - 🔧 Consistent exception formatting
 - 📋 Field-specific error collection support (V3)
 
 ### IP Address Utilities
+
 - 🌐 Client IP extraction from HTTP context
 - 🔍 Proxy and CDN header support (Cloudflare, Nginx)
 - 🔢 IP address format conversion (string/long)
 - 🛡️ Robust fallback mechanisms
 
 ### Configuration Management
+
 - 🔑 Key-value pair modeling with metadata
 - 🏷️ Typed configuration objects with defaults
 - 🔒 Public/private access control
@@ -47,7 +62,52 @@ dotnet add package Bikiran.Utils
 
 ## Quick Start
 
+### Console Logging
+
+```csharp
+using Bikiran.Utils.Models;
+
+// Basic colored output
+ConsoleLogger.Green("Success message");
+ConsoleLogger.Red("Error message");
+ConsoleLogger.Yellow("Warning message");
+
+// Log levels with timestamps
+ConsoleLogger.Success("Operation completed successfully");
+ConsoleLogger.Info("Processing data...");
+ConsoleLogger.Warning("Resource usage is high");
+ConsoleLogger.Error("Failed to connect to database");
+ConsoleLogger.Debug("Variable x = 42");
+
+// Multi-color output on same line
+ConsoleLogger.WriteMultiColor(
+    ("Status: ", ConsoleColor.Gray),
+    ("Active", ConsoleColor.Green),
+    (" | Users: ", ConsoleColor.Gray),
+    ("1,234", ConsoleColor.Cyan)
+);
+
+// Headers and separators
+ConsoleLogger.WriteHeader("Application Started");
+ConsoleLogger.WriteSeparator();
+
+// Progress indicator
+for (int i = 1; i <= 100; i++)
+{
+    ConsoleLogger.WriteProgress("Processing", i, 100);
+    Thread.Sleep(50);
+}
+
+// Key-value pairs
+ConsoleLogger.WriteKeyValue("Server", "192.168.1.1");
+ConsoleLogger.WriteKeyValue("Port", "8080");
+
+// Banner with background
+ConsoleLogger.WriteBanner("SYSTEM ALERT", ConsoleColor.White, ConsoleColor.DarkRed);
+```
+
 ### Debugging Helpers
+
 ```csharp
 using Bikiran.Utils;
 
@@ -64,6 +124,7 @@ catch {
 ```
 
 ### Exception Creation
+
 ```csharp
 using Bikiran.Utils.Models;
 
@@ -85,6 +146,7 @@ throw validationException;
 ```
 
 ### IP Address Operations
+
 ```csharp
 using Bikiran.Utils.Models;
 
@@ -93,10 +155,10 @@ public IActionResult GetUserInfo()
 {
     // Get client IP as string (supports Cloudflare, Nginx proxies)
     string clientIp = IpOperation.GetIpString(HttpContext);
-    
+
     // Get IP as long integer for database storage/comparison
     long ipAsLong = IpOperation.GetIpLong(HttpContext);
-    
+
     return Ok(new { ClientIP = clientIp, IpNumeric = ipAsLong });
 }
 
@@ -107,6 +169,7 @@ public IActionResult GetUserInfo()
 ```
 
 ### API Response Handling
+
 ```csharp
 using Bikiran.Utils.Models.ApiResp;
 
@@ -126,6 +189,7 @@ catch (Exception ex) {
 ```
 
 ### API Response V3 (Strongly-Typed with Field Errors)
+
 ```csharp
 using Bikiran.Utils.ApiResp;
 
@@ -156,12 +220,12 @@ public ActionResult<ApiResponseV3<User>> CreateUser(UserDto dto)
     if (!ModelState.IsValid)
     {
         var errors = ModelState.SelectMany(x => x.Value.Errors)
-            .Select(e => new ApiErrorV3 
-            { 
+            .Select(e => new ApiErrorV3
+            {
                 Field = e.Exception?.Source ?? "Unknown",
-                Message = e.ErrorMessage 
+                Message = e.ErrorMessage
             }).ToList();
-            
+
         return BadRequest(new ApiResponseV3<object>
         {
             Error = true,
@@ -169,7 +233,7 @@ public ActionResult<ApiResponseV3<User>> CreateUser(UserDto dto)
             Errors = errors
         });
     }
-    
+
     var user = userService.Create(dto);
     return Ok(new ApiResponseV3<User>
     {
@@ -182,11 +246,12 @@ public ActionResult<ApiResponseV3<User>> CreateUser(UserDto dto)
 ```
 
 ### Key-Value Configuration
+
 ```csharp
 using Bikiran.Utils.Models;
 
 // Create a configuration entry
-var config = new KeyObj 
+var config = new KeyObj
 {
     Key = "App.Theme.Color",
     Title = "Application Color Scheme",
@@ -200,7 +265,66 @@ Console.WriteLine(config);
 
 ## Core Components
 
+### `ConsoleLogger` Class (Console Output)
+
+```csharp
+// Basic colored output methods (8 colors)
+ConsoleLogger.Green("message");    // Green text
+ConsoleLogger.Red("message");      // Red text
+ConsoleLogger.Yellow("message");   // Yellow text
+ConsoleLogger.Blue("message");     // Blue text
+ConsoleLogger.Cyan("message");     // Cyan text
+ConsoleLogger.Magenta("message");  // Magenta text
+ConsoleLogger.Gray("message");     // Gray text
+ConsoleLogger.White("message");    // White text
+
+// Log level methods with optional timestamps
+ConsoleLogger.Success("Operation completed", includeTimestamp: true);
+ConsoleLogger.Info("Processing started", includeTimestamp: true);
+ConsoleLogger.Warning("Low disk space", includeTimestamp: false);
+ConsoleLogger.Error("Connection failed", includeTimestamp: true);
+ConsoleLogger.Debug("Variable state", includeTimestamp: false);
+
+// Generic colored output
+ConsoleLogger.WriteLine("Custom message", ConsoleColor.Magenta);
+ConsoleLogger.Write("Inline text ", ConsoleColor.Yellow);
+
+// Multi-color output on same line
+ConsoleLogger.WriteMultiColor(
+    ("User: ", ConsoleColor.Gray),
+    ("admin", ConsoleColor.Green),
+    (" | Status: ", ConsoleColor.Gray),
+    ("Online", ConsoleColor.Cyan)
+);
+
+// Headers and separators
+ConsoleLogger.WriteHeader("System Report", ConsoleColor.Cyan);
+ConsoleLogger.WriteSeparator('-', 50, ConsoleColor.Gray);
+ConsoleLogger.WriteSeparator('=', 80, ConsoleColor.Blue);
+
+// Key-value formatted output
+ConsoleLogger.WriteKeyValue("Database", "Connected",
+    ConsoleColor.Yellow, ConsoleColor.Green);
+ConsoleLogger.WriteKeyValue("Cache", "Disabled",
+    ConsoleColor.Yellow, ConsoleColor.Red);
+
+// Progress indicator for loops
+for (int i = 1; i <= total; i++)
+{
+    ConsoleLogger.WriteProgress("Uploading files", i, total, ConsoleColor.Green);
+    // ... processing logic
+}
+
+// Banner with background color
+ConsoleLogger.WriteBanner("PRODUCTION ENVIRONMENT",
+    ConsoleColor.White, ConsoleColor.DarkRed);
+
+// Clear console with optional background color
+ConsoleLogger.Clear(ConsoleColor.DarkBlue);
+```
+
 ### `C` Class (Debugging)
+
 ```csharp
 // Print values with headers
 C.Print("Configuration", configValue);
@@ -210,6 +334,7 @@ C.X("Critical failure", errorContext);
 ```
 
 ### `Excep` Class (Exception Creation)
+
 ```csharp
 // Create exception with optional reference
 var exception = Excep.Create("Error message", "Optional.Reference.Context");
@@ -230,6 +355,7 @@ var exception = Excep.CreateV3("Validation failed", errors);
 ```
 
 ### `IpOperation` Class (IP Address Utilities)
+
 ```csharp
 // Get client IP address as string
 string clientIp = IpOperation.GetIpString(httpContext);
@@ -239,11 +365,12 @@ long ipNumeric = IpOperation.GetIpLong(httpContext);
 
 // Priority order for IP detection:
 // 1. CF-Connecting-IP (Cloudflare)
-// 2. X-Forwarded-For (Nginx/Proxy) 
+// 2. X-Forwarded-For (Nginx/Proxy)
 // 3. RemoteIpAddress (Direct connection)
 ```
 
 ### `ApiResponse` Model
+
 ```csharp
 public class ApiResponse {
     public bool Error { get; set; }
@@ -254,6 +381,7 @@ public class ApiResponse {
 ```
 
 ### `ApiResponseV3<T>` Model (Strongly-Typed)
+
 ```csharp
 public class ApiResponseV3<T> {
     public bool Error { get; set; }
@@ -270,6 +398,7 @@ public class ApiErrorV3 {
 ```
 
 ### `KeyObj` Configuration Model
+
 ```csharp
 public class KeyObj {
     public string Key { get; set; }         // Unique identifier
@@ -280,29 +409,170 @@ public class KeyObj {
 ```
 
 ### Factory Methods Reference
-| Component          | Method            | Purpose                          | Example                          |
-|--------------------|-------------------|----------------------------------|----------------------------------|
-| **IpOperation**    | `GetIpString()`   | Get client IP as string          | `GetIpString(HttpContext)`       |
-|                    | `GetIpLong()`     | Get client IP as long integer    | `GetIpLong(HttpContext)`         |
-| **Excep**          | `Create()`        | Create exception with reference  | `Create("Error", "Module.Method")` |
-|                    | `CreateV3()`      | Create exception with field errors | `CreateV3("Validation failed", errors)` |
-| **ApiResponse**    | `Success()`       | Successful operation             | `Success("Created", data)`       |
-|                    | `Error()`         | Generic error                    | `Error("Validation failed")`     |
-|                    | `NotFound()`      | 404 equivalent                   | `NotFound("User missing")`       |
-|                    | `BadRequest()`    | 400 equivalent                   | `BadRequest(exception)`          |
-| **ApiResponseV3**  | (Constructor)     | Create typed API response        | `new ApiResponseV3<User> { ... }` |
-| **ApiErrorV3**     | (Constructor)     | Create field-level error         | `new ApiErrorV3 { ... }`         |
-| **KeyObj**         | (Constructor)     | Create configuration entry       | `new KeyObj { ... }`             |
+
+| Component         | Method              | Purpose                            | Example                                 |
+| ----------------- | ------------------- | ---------------------------------- | --------------------------------------- |
+| **ConsoleLogger** | `Green()`           | Green colored output               | `Green("Success")`                      |
+|                   | `Red()`             | Red colored output                 | `Red("Error")`                          |
+|                   | `Yellow()`          | Yellow colored output              | `Yellow("Warning")`                     |
+|                   | `Blue()`            | Blue colored output                | `Blue("Info")`                          |
+|                   | `Cyan()`            | Cyan colored output                | `Cyan("Notice")`                        |
+|                   | `Magenta()`         | Magenta colored output             | `Magenta("Debug")`                      |
+|                   | `Gray()`            | Gray colored output                | `Gray("Disabled")`                      |
+|                   | `White()`           | White colored output               | `White("Normal")`                       |
+|                   | `Success()`         | Success log with timestamp         | `Success("Done", true)`                 |
+|                   | `Info()`            | Info log with timestamp            | `Info("Starting", true)`                |
+|                   | `Warning()`         | Warning log with timestamp         | `Warning("Check this", false)`          |
+|                   | `Error()`           | Error log with timestamp           | `Error("Failed", true)`                 |
+|                   | `Debug()`           | Debug log with timestamp           | `Debug("x=5", false)`                   |
+|                   | `WriteLine()`       | Custom colored line                | `WriteLine("Text", Color.Red)`          |
+|                   | `Write()`           | Custom colored inline text         | `Write("Text", Color.Blue)`             |
+|                   | `WriteMultiColor()` | Multi-color line                   | `WriteMultiColor(segments)`             |
+|                   | `WriteHeader()`     | Formatted header                   | `WriteHeader("Title")`                  |
+|                   | `WriteSeparator()`  | Separator line                     | `WriteSeparator('-', 50)`               |
+|                   | `WriteKeyValue()`   | Key-value pair                     | `WriteKeyValue("Key", "Value")`         |
+|                   | `WriteProgress()`   | Progress indicator                 | `WriteProgress("Task", 5, 10)`          |
+|                   | `WriteBanner()`     | Banner with background             | `WriteBanner("ALERT")`                  |
+|                   | `Clear()`           | Clear console                      | `Clear(ConsoleColor.Black)`             |
+| **IpOperation**   | `GetIpString()`     | Get client IP as string            | `GetIpString(HttpContext)`              |
+|                   | `GetIpLong()`       | Get client IP as long integer      | `GetIpLong(HttpContext)`                |
+| **Excep**         | `Create()`          | Create exception with reference    | `Create("Error", "Module.Method")`      |
+|                   | `CreateV3()`        | Create exception with field errors | `CreateV3("Validation failed", errors)` |
+| **ApiResponse**   | `Success()`         | Successful operation               | `Success("Created", data)`              |
+|                   | `Error()`           | Generic error                      | `Error("Validation failed")`            |
+|                   | `NotFound()`        | 404 equivalent                     | `NotFound("User missing")`              |
+|                   | `BadRequest()`      | 400 equivalent                     | `BadRequest(exception)`                 |
+| **ApiResponseV3** | (Constructor)       | Create typed API response          | `new ApiResponseV3<User> { ... }`       |
+| **ApiErrorV3**    | (Constructor)       | Create field-level error           | `new ApiErrorV3 { ... }`                |
+| **KeyObj**        | (Constructor)       | Create configuration entry         | `new KeyObj { ... }`                    |
 
 ## Key Differences: ApiResponse vs ApiResponseV3
 
-| Feature | ApiResponse | ApiResponseV3<T> |
-|---------|-------------|------------------|
-| **Data Type** | `object` (requires casting) | Generic `T` (type-safe) |
-| **Error Details** | Single message only | Collection of field-specific errors |
-| **Null Safety** | Standard C# | Nullable reference types enabled |
-| **Use Case** | Simple success/error responses | Complex validation with multiple errors |
-| **Type Safety** | Runtime checks needed | Compile-time type checking |
+| Feature           | ApiResponse                    | ApiResponseV3<T>                        |
+| ----------------- | ------------------------------ | --------------------------------------- |
+| **Data Type**     | `object` (requires casting)    | Generic `T` (type-safe)                 |
+| **Error Details** | Single message only            | Collection of field-specific errors     |
+| **Null Safety**   | Standard C#                    | Nullable reference types enabled        |
+| **Use Case**      | Simple success/error responses | Complex validation with multiple errors |
+| **Type Safety**   | Runtime checks needed          | Compile-time type checking              |
+
+## Real-World Use Cases
+
+### Console Application Logging
+
+```csharp
+// Application startup sequence
+ConsoleLogger.WriteHeader("MyApp v1.0.0");
+ConsoleLogger.Info("Initializing application...");
+ConsoleLogger.Success("Configuration loaded");
+ConsoleLogger.Success("Database connected");
+ConsoleLogger.WriteSeparator();
+
+// Processing with progress
+var items = GetItemsToProcess();
+for (int i = 0; i < items.Count; i++)
+{
+    ConsoleLogger.WriteProgress("Processing items", i + 1, items.Count);
+    ProcessItem(items[i]);
+}
+
+// System status display
+ConsoleLogger.WriteSeparator('=', 60);
+ConsoleLogger.WriteKeyValue("Server", "Running", ConsoleColor.Yellow, ConsoleColor.Green);
+ConsoleLogger.WriteKeyValue("Memory Usage", "45%", ConsoleColor.Yellow, ConsoleColor.Cyan);
+ConsoleLogger.WriteKeyValue("Active Users", "127", ConsoleColor.Yellow, ConsoleColor.White);
+ConsoleLogger.WriteSeparator('=', 60);
+```
+
+### API Development with Combined Utilities
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class UsersController : ControllerBase
+{
+    [HttpPost]
+    public ActionResult<ApiResponseV3<User>> CreateUser(CreateUserDto dto)
+    {
+        // Log incoming request
+        var clientIp = IpOperation.GetIpString(HttpContext);
+        ConsoleLogger.Info($"User creation request from {clientIp}");
+
+        // Validate input
+        var errors = ValidateUser(dto);
+        if (errors.Any())
+        {
+            ConsoleLogger.Warning($"Validation failed for user: {dto.Email}");
+            return BadRequest(new ApiResponseV3<object>
+            {
+                Error = true,
+                Message = "Validation failed",
+                Errors = errors
+            });
+        }
+
+        try
+        {
+            var user = _userService.Create(dto);
+            ConsoleLogger.Success($"User created: {user.Email} (ID: {user.Id})");
+
+            return Ok(new ApiResponseV3<User>
+            {
+                Error = false,
+                Message = "User created successfully",
+                Data = user,
+                ReferenceName = Guid.NewGuid().ToString()
+            });
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.Error($"Failed to create user: {ex.Message}");
+            return StatusCode(500, ApiResponseHandler.Error(ex));
+        }
+    }
+}
+```
+
+### Background Job Monitoring
+
+```csharp
+public class DataSyncJob
+{
+    public async Task RunAsync()
+    {
+        ConsoleLogger.WriteBanner("DATA SYNC JOB STARTED",
+            ConsoleColor.White, ConsoleColor.DarkBlue);
+
+        var startTime = DateTime.UtcNow;
+        ConsoleLogger.WriteKeyValue("Start Time", startTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        ConsoleLogger.WriteSeparator();
+
+        try
+        {
+            // Sync operation
+            var records = await FetchRecordsAsync();
+            ConsoleLogger.Info($"Fetched {records.Count} records");
+
+            for (int i = 0; i < records.Count; i++)
+            {
+                await SyncRecord(records[i]);
+                ConsoleLogger.WriteProgress("Syncing", i + 1, records.Count);
+            }
+
+            var duration = DateTime.UtcNow - startTime;
+            ConsoleLogger.WriteSeparator();
+            ConsoleLogger.Success($"Sync completed in {duration.TotalSeconds:F2} seconds");
+            ConsoleLogger.WriteKeyValue("Records Synced", records.Count.ToString());
+        }
+        catch (Exception ex)
+        {
+            ConsoleLogger.Error($"Sync failed: {ex.Message}");
+            ConsoleLogger.Debug($"Stack trace: {ex.StackTrace}");
+            throw;
+        }
+    }
+}
+```
 
 ## Documentation
 
@@ -314,6 +584,7 @@ public class KeyObj {
 ## Contributing
 
 We welcome contributions! Please:
+
 1. Fork the repository
 2. Create your feature branch
 3. Add tests for new functionality
